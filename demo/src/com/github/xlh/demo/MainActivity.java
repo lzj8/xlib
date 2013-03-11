@@ -21,8 +21,9 @@ public class MainActivity extends BaseActivity {
 	private ListView mLv = null;
 	private Adapter mAdapter = null;
 
-	private String[] mTitles = { "WebImageView" };
-	private Class[] mActivities = { WebImageActivity.class };
+	private String[] mTitles = { "WebImageView Demo", "PetalMenu Demo" };
+	private Class[] mActivities = { WebImageActivity.class,
+			PetalMenuActivity.class };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

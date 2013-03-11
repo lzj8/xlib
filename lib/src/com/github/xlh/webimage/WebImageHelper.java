@@ -1,31 +1,35 @@
 package com.github.xlh.webimage;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.widget.ImageView;
 
+import com.github.xlh.lib.R;
+import com.github.xlh.utils.MetricsUtil;
 import com.github.xlh.webimage.ImageCache.ImageCacheParams;
 
 public class WebImageHelper {
 	private ImageView mImageView;
 
 	private String mImageUrl = "";
-
+	private static final float LARGE_IMAGE_SIZE_FACTOR = 1.0f;
+	private static final float MEDIUM_IMAGE_SIZE_FACTOR = 0.5f;
 	private static final String IMAGE_CACHE_DIR = "img_cache";
 
 	private Drawable mLoadingDrawable;
 
 	private boolean mAutoDownLoadImage = true;
 
-	public static final int INITIAL = 0;
-
-	public static final int DOWNLOADING = 1;
-
-	public static final int FAILED = 2;
-
-	public static final int SUCCEEDED = 3;
+	// public static final int INITIAL = 0;
+	//
+	// public static final int DOWNLOADING = 1;
+	//
+	// public static final int FAILED = 2;
+	//
+	// public static final int SUCCEEDED = 3;
 
 	public static final int VIEW_SIZE_TYPE_SMALL = -1;
 
@@ -135,7 +139,7 @@ public class WebImageHelper {
 
 	private ImageFetcher initialImageFecher(int size) {
 		if (size == 0) {
-			throw new RuntimeException("WebImageView should setImageSize first");
+			setUpDefaultSizes(mImageView.getContext());
 		}
 		ImageFetcher fecher = new ImageFetcher(mImageView.getContext(), size);
 		fecher.setImageCache(imageCache, true);
@@ -203,5 +207,17 @@ public class WebImageHelper {
 			return bitmap;
 		}
 		return imageCache.getBitmapFromDiskCache(url);
+	}
+
+	public static void setUpDefaultSizes(Context ctx) {
+		Resources res = ctx.getResources();
+		int smallSize = res
+				.getDimensionPixelSize(R.dimen.default_small_webimage_size);
+		setSmallImageSize(smallSize);
+		int width = MetricsUtil.getScreenWidth(ctx);
+		int height = MetricsUtil.getScreenHeight(ctx);
+		int maxValue = Math.max(width, height);
+		setMediumImageSize((int) (MEDIUM_IMAGE_SIZE_FACTOR * maxValue));
+		setLargeImageSize((int) (LARGE_IMAGE_SIZE_FACTOR * maxValue));
 	}
 }

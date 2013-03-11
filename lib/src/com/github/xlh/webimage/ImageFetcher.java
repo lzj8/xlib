@@ -42,7 +42,7 @@ import android.util.Log;
  */
 public class ImageFetcher extends ImageResizer {
 	private static final String TAG = "ImageFetcher";
-
+	private static final int TIME_OUT = 30000;
 	private static final int HTTP_CACHE_SIZE = 10 * 1024 * 1024; // 10MB
 
 	private static final String HTTP_CACHE_DIR = "http";
@@ -279,6 +279,8 @@ public class ImageFetcher extends ImageResizer {
 		try {
 			final URL url = new URL(urlString);
 			urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection.setConnectTimeout(TIME_OUT);
+			urlConnection.setReadTimeout(TIME_OUT);
 			in = new BufferedInputStream(urlConnection.getInputStream(),
 					IO_BUFFER_SIZE);
 			out = new BufferedOutputStream(outputStream, IO_BUFFER_SIZE);
